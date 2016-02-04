@@ -50,9 +50,13 @@ end
 
 # Fetch subtitles for paths
 def run_subliminal(label, paths, options = {})
-  options.reverse_merge!(language: "en")
+  options.reverse_merge!(language: ["en", "de"])
 
-  option_args = options.each_with_object([]) { |(k, v), a| a << "--#{k} #{v}" }.join(' ')
+  option_args = options.each_with_object([]) do |(option, values), args| 
+    [*values].each do |value|
+      args << "--#{option} #{value}"  
+    end
+  end.join(' ')
   path_args = paths.map { |p| "\"#{p}\"" }.join(' ')
 
   puts "Fetching subtitles for #{label}..."
